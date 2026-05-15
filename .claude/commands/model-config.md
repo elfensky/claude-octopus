@@ -180,6 +180,25 @@ AskUserQuestion({
 ```
 
 After selection, apply the change:
+
+**Step 0 — Ensure plugin root is resolvable (run via Bash tool FIRST):**
+
+```bash
+OCTO_ROOT="${HOME}/.claude-octopus/plugin"
+if [[ ! -x "$OCTO_ROOT/scripts/orchestrate.sh" ]]; then
+  cache="$(find "${HOME}/.claude/plugins/cache" "${HOME}/Library/Application Support/Claude" -maxdepth 8 -path "*/nyldn-plugins/octo/*/scripts/orchestrate.sh" -print -quit 2>/dev/null)"
+  if [[ -n "$cache" ]]; then
+    plugin_dir="$(cd "$(dirname "$(dirname "$cache")")" && pwd -P)"
+    mkdir -p "${HOME}/.claude-octopus"
+    ln -sfn "$plugin_dir" "$OCTO_ROOT"
+  fi
+fi
+test -x "$OCTO_ROOT/scripts/orchestrate.sh" && echo "plugin-root:ok" || echo "plugin-root:missing"
+```
+
+If the output is `plugin-root:missing`, stop and tell the user to run `/octo:setup`.
+
+
 ```bash
 ${HOME}/.claude-octopus/plugin/scripts/orchestrate.sh set-model <provider> <model>
 ```

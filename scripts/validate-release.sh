@@ -112,7 +112,6 @@ EOF
 .opencode/
 .mcp.json
 bin/
-commands/
 managed-settings.d/
 skills/
 docs/

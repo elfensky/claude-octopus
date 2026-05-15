@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # build-factory-skills.sh — Generate shared portable skills plus
-# Factory AI-compatible commands/<name>.md from .claude/commands/*.md.
+# Cursor-compatible .cursor-plugin/commands/<name>.md from .claude/commands/*.md.
 #
 # Shared format: skills/<skill-name>/SKILL.md with frontmatter: name, description
-# Factory format: commands/<name>.md with frontmatter: description
+# Cursor command format: .cursor-plugin/commands/<name>.md with frontmatter: description
 # Our source format: .claude/skills/*.md and .claude/commands/*.md
 #
 # Usage: bash scripts/build-factory-skills.sh [--clean]
@@ -15,7 +15,7 @@ PLUGIN_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 SKILLS_SRC="$PLUGIN_ROOT/.claude/skills"
 SKILLS_OUT="$PLUGIN_ROOT/skills"
 COMMANDS_SRC="$PLUGIN_ROOT/.claude/commands"
-COMMANDS_OUT="$PLUGIN_ROOT/commands"
+COMMANDS_OUT="$PLUGIN_ROOT/.cursor-plugin/commands"
 
 normalize_single_line() {
   printf '%s' "$1" | tr '\n' ' ' | sed -E 's/[[:space:]]+/ /g; s/^ //; s/ $//'
@@ -33,7 +33,7 @@ yaml_quote() {
 STRIP_KEYS="agent|aliases|category|context|cost_optimization|created|execution_mode|invocation|pattern|pre_execution_contract|providers|tags|task_dependencies|task_management|trigger|updated|use_native_tasks|validation_gates|version"
 
 if [[ "${1:-}" == "--clean" ]]; then
-  echo "Cleaning generated skills and commands directories..."
+  echo "Cleaning generated skills and cursor command directories..."
   rm -rf "$SKILLS_OUT" "$COMMANDS_OUT"
   echo "Done."
   exit 0
@@ -62,7 +62,7 @@ if [[ -d "$COMMANDS_SRC" ]]; then
     filename="$(basename "$src")"
     basename_no_ext="$(basename "$src" .md)"
 
-    # Factory has no plugin namespacing — prefix with "octo-" so all commands
+    # Cursor has no plugin namespacing — prefix with "octo-" so all commands
     # appear under /octo-* (mirrors Claude Code's /octo:* namespace).
     # Skip prefixing "octo.md" itself (already named correctly).
     if [[ "$basename_no_ext" == "octo" ]]; then

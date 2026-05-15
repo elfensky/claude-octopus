@@ -92,7 +92,7 @@ done
 assert_contains "$PROJECT_ROOT/hooks/strategy-rotation.sh" 'octo_resolve_session_id' \
     "strategy-rotation.sh uses shared session resolver"
 
-for cmd in commands/octo-careful.md commands/octo-freeze.md commands/octo-guard.md commands/octo-unfreeze.md \
+for cmd in .cursor-plugin/commands/octo-careful.md .cursor-plugin/commands/octo-freeze.md .cursor-plugin/commands/octo-guard.md .cursor-plugin/commands/octo-unfreeze.md \
            .claude/commands/careful.md .claude/commands/freeze.md .claude/commands/guard.md .claude/commands/unfreeze.md; do
     assert_contains "$PROJECT_ROOT/$cmd" 'CLAUDE_CODE_SESSION_ID' \
         "$cmd writes state with Claude Code Bash session id"

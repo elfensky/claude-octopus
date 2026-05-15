@@ -108,7 +108,7 @@ fi
 echo ""
 echo "=== Develop Direct Dispatch Preserves Preflight ==="
 
-for develop_file in "$PROJECT_ROOT/.claude/commands/develop.md" "$PROJECT_ROOT/commands/octo-develop.md"; do
+for develop_file in "$PROJECT_ROOT/.claude/commands/develop.md" "$PROJECT_ROOT/.cursor-plugin/commands/octo-develop.md"; do
     develop_name=$(basename "$develop_file")
     if [[ -f "$develop_file" ]]; then
         preflight_line=$(grep -n 'helpers/check-providers.sh' "$develop_file" | head -1 | cut -d: -f1 || true)

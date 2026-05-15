@@ -18,7 +18,7 @@ fail() { test_case "$1"; test_fail "${2:-$1}"; }
 
 EXEMPT_COMMANDS="octo-auto octo-careful octo-claw octo-costs octo-dev octo-doctor octo-freeze octo-guard octo-history octo-km octo-model-config octo-setup octo-unfreeze"
 
-for f in "$PROJECT_ROOT"/commands/octo-*.md; do
+for f in "$PROJECT_ROOT"/.cursor-plugin/commands/octo-*.md; do
     name=$(basename "$f" .md)
 
     # Skip exempt utility commands
@@ -62,7 +62,7 @@ done
 
 # ── Enforcement blocks must include PROHIBITED ───────────────────────────────
 
-for f in "$PROJECT_ROOT"/commands/octo-*.md "$PROJECT_ROOT"/skills/*/SKILL.md; do
+for f in "$PROJECT_ROOT"/.cursor-plugin/commands/octo-*.md "$PROJECT_ROOT"/skills/*/SKILL.md; do
     if grep -q 'MANDATORY COMPLIANCE' "$f" 2>/dev/null; then
         name=$(basename "$f" .md)
         [[ "$name" == "SKILL" ]] && name=$(basename "$(dirname "$f")")

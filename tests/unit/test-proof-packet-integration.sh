@@ -9,7 +9,7 @@ ORCH="$PROJECT_ROOT/scripts/orchestrate.sh"
 REVIEW_LIB="$PROJECT_ROOT/scripts/lib/review.sh"
 PROOF_LIB="$PROJECT_ROOT/scripts/lib/proof-packet.sh"
 CLAUDE_CMD="$PROJECT_ROOT/.claude/commands/review.md"
-CODEX_CMD="$PROJECT_ROOT/commands/octo-review.md"
+CODEX_CMD="$PROJECT_ROOT/.cursor-plugin/commands/octo-review.md"
 
 # shellcheck source=/dev/null
 source "$SCRIPT_DIR/../helpers/test-framework.sh"

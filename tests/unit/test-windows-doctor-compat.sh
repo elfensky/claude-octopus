@@ -22,7 +22,7 @@ fi
 
 test_case "doctor commands use portable plugin-root discovery"
 doctor_source="$(< "$PROJECT_ROOT/.claude/commands/doctor.md")"
-doctor_generated="$(< "$PROJECT_ROOT/commands/octo-doctor.md")"
+doctor_generated="$(< "$PROJECT_ROOT/.cursor-plugin/commands/octo-doctor.md")"
 if assert_contains "$doctor_source" 'find "${HOME}/.claude/plugins"' "source command searches Claude plugin installs" &&
    assert_contains "$doctor_source" 'cd "$OCTO_PLUGIN_ROOT" && bash scripts/orchestrate.sh doctor --verbose' "source command runs doctor from resolved root" &&
    assert_contains "$doctor_generated" 'find "${HOME}/.claude/plugins"' "generated command searches Claude plugin installs" &&

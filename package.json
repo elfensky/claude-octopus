@@ -26,7 +26,6 @@
     "scripts/",
     "agents/",
     "bin/",
-    "commands/",
     "hooks/",
     "skills/",
     "config/workflows/",

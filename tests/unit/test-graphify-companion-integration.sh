@@ -10,9 +10,9 @@ REVIEW_LIB="$PROJECT_ROOT/scripts/lib/review.sh"
 DOCTOR_LIB="$PROJECT_ROOT/scripts/lib/doctor.sh"
 GRAPHIFY_LIB="$PROJECT_ROOT/scripts/lib/graphify.sh"
 CLAUDE_SETUP="$PROJECT_ROOT/.claude/commands/setup.md"
-CODEX_SETUP="$PROJECT_ROOT/commands/octo-setup.md"
+CODEX_SETUP="$PROJECT_ROOT/.cursor-plugin/commands/octo-setup.md"
 CLAUDE_REVIEW="$PROJECT_ROOT/.claude/commands/review.md"
-CODEX_REVIEW="$PROJECT_ROOT/commands/octo-review.md"
+CODEX_REVIEW="$PROJECT_ROOT/.cursor-plugin/commands/octo-review.md"
 CHANGELOG="$PROJECT_ROOT/CHANGELOG.md"
 
 # shellcheck source=/dev/null

@@ -104,7 +104,7 @@ else
     fail "README documents Claude Code web and remote workflow" "remote docs missing"
 fi
 
-if ! grep -R -q 'claude --remote\|claude --teleport' "$README" "$PROJECT_ROOT/commands" "$PROJECT_ROOT/.claude/commands"; then
+if ! grep -R -q 'claude --remote\|claude --teleport' "$README" "$PROJECT_ROOT/.cursor-plugin/commands" "$PROJECT_ROOT/.claude/commands"; then
     pass "remote docs avoid unsupported Claude CLI flags"
 else
     fail "remote docs avoid unsupported Claude CLI flags" "unsupported CLI flag documented"

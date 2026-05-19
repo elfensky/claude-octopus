@@ -1,5 +1,16 @@
 # Changelog
 
+## [9.38.1] - 2026-05-19
+
+### Fixed
+
+- flow-develop: E2E verification agent now receives the original task description verbatim at prompt-construction time instead of a static generic reference (#398, closes #389)
+- probe: compact synthesis fallback — bounded context and sanitized failure markers in synthesis (#396)
+- ink: compact delivery context — bounded delivery bundle, sanitized upstream failure markers (#394)
+- tangle: fall back to direct execution when decomposition produces no parseable subtasks (#391)
+
+---
+
 ## [9.38.0] - 2026-05-15
 
 ### Changed

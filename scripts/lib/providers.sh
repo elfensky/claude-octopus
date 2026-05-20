@@ -790,6 +790,11 @@ check_provider_health() {
                 echo "vibe CLI not found in PATH" >&2
                 return 1
             fi
+            # Try resolving env var from profile/.env for non-interactive shells
+            # (mirrors codex/gemini — keeps shell-profile-only keys from being misreported)
+            if [[ -z "${MISTRAL_API_KEY:-}" ]]; then
+                resolve_provider_env "MISTRAL_API_KEY" 2>/dev/null
+            fi
             # Check auth: env-file with MISTRAL_API_KEY, env var, or config.toml api_key
             if [[ -z "${MISTRAL_API_KEY:-}" ]] && \
                ! { [[ -f "${HOME}/.vibe/.env" ]] && grep -Eq '^[[:space:]]*MISTRAL_API_KEY=' "${HOME}/.vibe/.env" 2>/dev/null; } && \

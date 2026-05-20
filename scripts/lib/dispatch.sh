@@ -117,9 +117,11 @@ get_agent_command() {
             echo "agent --trust --output-format text --model ${model}"
             ;;
         vibe|vibe-research)  # Mistral Vibe — interactive CLI (model in ~/.vibe/config.toml)
-            # auto-approve is implicit in -p mode. -p MUST be last: it takes the
-            # next arg as the prompt, so the caller-appended prompt binds to it.
-            echo "vibe --output text -p"
+            # Routed through helpers/vibe-exec.sh: vibe's -p only accepts the
+            # prompt as argv (stdin yields "No prompt provided"), so the shim
+            # reads stdin and re-passes it as `-p "<prompt>"`. Keeps spawn.sh's
+            # uniform stdin contract intact (Issue #173).
+            echo "${PLUGIN_DIR}/scripts/helpers/vibe-exec.sh --output text"
             ;;
         opencode|opencode-fast|opencode-research)  # v9.11.0: OpenCode CLI — multi-provider router
             model=$(get_agent_model "$agent_type" "$phase" "$role")

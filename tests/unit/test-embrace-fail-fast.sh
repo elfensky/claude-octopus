@@ -27,13 +27,14 @@ fi
 # shellcheck source=/dev/null
 source "$WORKFLOWS"
 
-TEST_ROOT="$(mktemp -d)"
-HOME="$TEST_ROOT/home"
-RESULTS_DIR="$TEST_ROOT/results"
-LOGS_DIR="$TEST_ROOT/logs"
-WORKSPACE_DIR="$TEST_ROOT/workspace"
+TEST_TMP_DIR="/tmp/octopus-tests-$$"
+HOME="$TEST_TMP_DIR/home"
+RESULTS_DIR="$TEST_TMP_DIR/results"
+LOGS_DIR="$TEST_TMP_DIR/logs"
+WORKSPACE_DIR="$TEST_TMP_DIR/workspace"
 PLUGIN_DIR="$PROJECT_ROOT"
-trap 'rm -rf "$TEST_ROOT"' EXIT
+trap 'rm -rf "$TEST_TMP_DIR"' EXIT INT TERM
+mkdir -p "$HOME" "$RESULTS_DIR" "$LOGS_DIR" "$WORKSPACE_DIR"
 
 CYAN=""
 GREEN=""

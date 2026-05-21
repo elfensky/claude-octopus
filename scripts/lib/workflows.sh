@@ -1834,14 +1834,7 @@ ${obs_ctx}"
             fi
         fi
 
-        # Clean up exported flags
-        unset OCTOPUS_SKIP_PHASE_COST_PROMPT
-        unset OCTOPUS_WORKFLOW_PHASE
-        unset OCTOPUS_WORKFLOW_TYPE
-        unset OCTOPUS_TASK_GROUP
-        unset OCTOPUS_TOTAL_PHASES
-        unset OCTOPUS_COMPLETED_PHASES
-        unset CLAUDE_CODE_DISABLE_CRON 2>/dev/null || true
+        _cleanup_embrace_exports
         return 0
     fi
 

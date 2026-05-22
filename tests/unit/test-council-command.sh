@@ -436,6 +436,31 @@ test_council_cost_cap_aborts_before_fanout() {
     fi
 }
 
+test_council_deep_fixture_writes_revision_artifacts() {
+    test_case "Council deep run writes revision artifacts"
+    load_council_lib || return 1
+
+    local tmp_dir
+    tmp_dir="$(mktemp -d "$TEST_TMP_DIR/council-deep.XXXXXX")"
+
+    OCTOPUS_COUNCIL_FIXTURE=full-success \
+    OCTOPUS_COUNCIL_PROVIDER_FIXTURE='claude:available,codex:available,gemini:available' \
+        council_run --depth deep --output-dir "$tmp_dir" "Review platform architecture"
+
+    local run_dir summary revision_count
+    run_dir="$(find "$tmp_dir" -mindepth 1 -maxdepth 1 -type d | head -1)"
+    summary="$run_dir/summary.json"
+    revision_count="$(find "$run_dir/revisions" -type f -name '*.md' | wc -l | tr -d ' ')"
+
+    if [[ "$revision_count" -eq 7 ]] &&
+       jq -e '.status == "completed" and .artifacts.revisions_dir == "revisions"' "$summary" >/dev/null; then
+        test_pass
+    else
+        test_fail "deep revision artifacts missing"
+        return 1
+    fi
+}
+
 test_council_command_files_are_registered
 test_council_orchestrate_route_exists
 test_council_defaults_are_depth_aware
@@ -457,4 +482,5 @@ test_council_plan_only_writes_implementation_plan_without_handoff
 test_council_after_approval_does_not_handoff_without_gate
 test_council_critical_veto_aborts_implementation_run
 test_council_cost_cap_aborts_before_fanout
+test_council_deep_fixture_writes_revision_artifacts
 test_summary

@@ -654,6 +654,25 @@ EOF
     done < <(jq -c '.[]' <<< "$COUNCIL_ROSTER_JSON")
 }
 
+council_run_revision_phase() {
+    if [[ "$COUNCIL_DEPTH" != "deep" ]]; then
+        return 0
+    fi
+
+    local index=0 member persona slug output_path
+    while IFS= read -r member; do
+        persona="$(jq -r '.persona' <<< "$member")"
+        slug="$(council_slug "$persona")"
+        output_path="${COUNCIL_RUN_DIR}/revisions/$(printf '%02d' "$index")-${slug}.md"
+        if council_dispatch_member "$member" "revision-after-critique" > "$output_path"; then
+            :
+        else
+            rm -f "$output_path"
+        fi
+        index=$((index + 1))
+    done < <(jq -c '.[]' <<< "$COUNCIL_ROSTER_JSON")
+}
+
 council_write_synthesis() {
     local synthesis_path="${COUNCIL_RUN_DIR}/synthesis.md"
     cat > "$synthesis_path" << EOF
@@ -899,7 +918,7 @@ council_create_run_dir() {
         COUNCIL_RUN_DIR="${parent}/${COUNCIL_RUN_ID}"
     done
 
-    mkdir -p "$COUNCIL_RUN_DIR/responses" "$COUNCIL_RUN_DIR/critiques" || return 1
+    mkdir -p "$COUNCIL_RUN_DIR/responses" "$COUNCIL_RUN_DIR/critiques" "$COUNCIL_RUN_DIR/revisions" || return 1
 }
 
 council_write_summary_json() {
@@ -980,6 +999,7 @@ council_write_summary_json() {
             synthesis: "synthesis.md",
             responses_dir: "responses",
             critiques_dir: "critiques",
+            revisions_dir: "revisions",
             implementation_plan: (if $implementation_plan_written == "true" then "implementation-plan.md" else null end)
           },
           implementation: {
@@ -1037,6 +1057,7 @@ council_run() {
     fi
 
     council_run_critique_phase
+    council_run_revision_phase
     council_write_synthesis
     council_write_implementation_plan
 

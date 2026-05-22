@@ -1,5 +1,12 @@
 # Changelog
 
+## [9.39.1] - 2026-05-22
+
+### Fixed
+
+- Honor `--timeout` for synthesis stages instead of hardcoding 180 seconds, so dense synthesis runs respect the caller's configured timeout (#408, #409).
+- Let `OCTOPUS_AGENT_TIMEOUT` override dispatch timeouts unconditionally and treat oversize provider rejections as skipped providers instead of aborting the whole dispatch (#410, #411).
+
 ## [9.39.0] - 2026-05-21
 
 ### Added

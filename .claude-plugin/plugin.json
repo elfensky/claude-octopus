@@ -39,6 +39,7 @@
     "./skills/skill-content-pipeline",
     "./skills/skill-context-detection",
     "./skills/skill-copilot-provider",
+    "./skills/skill-council",
     "./skills/skill-cost-projections",
     "./skills/skill-coverage-audit",
     "./skills/skill-debate",
@@ -122,6 +123,7 @@
     "./.claude/commands/guard.md",
     "./.claude/commands/unfreeze.md",
     "./.claude/commands/costs.md",
+    "./.claude/commands/council.md",
     "./.claude/commands/retro.md",
     "./.claude/commands/history.md",
     "./.claude/commands/discipline.md"

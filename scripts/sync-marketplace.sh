@@ -21,7 +21,7 @@ COMMAND_COUNT=$(python3 -c "import json; print(len(json.load(open('$PLUGIN_JSON'
 PERSONA_COUNT=$(find "$ROOT_DIR/agents/personas" -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
 
 # Get current version from plugin.json (source of truth)
-VERSION=$(grep '"version"' "$PLUGIN_JSON" | head -1 | sed 's/.*: *"\([^"]*\)".*/\1/')
+VERSION=$(python3 -c "import json; print(json.load(open('$PLUGIN_JSON')).get('version', ''))")
 
 # Read current marketplace description
 CURRENT_DESC=$(python3 -c "

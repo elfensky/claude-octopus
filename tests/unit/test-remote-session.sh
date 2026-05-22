@@ -25,6 +25,7 @@ read_repo_file() {
     elif git -C "$PROJECT_ROOT" cat-file -e "HEAD:$file" 2>/dev/null; then
         git -C "$PROJECT_ROOT" show "HEAD:$file"
     fi
+    return 0
 }
 
 if grep -q 'CLAUDE_CODE_REMOTE' "$ORCHESTRATE" && grep -q 'OCTOPUS_REMOTE_SESSION' "$ORCHESTRATE"; then

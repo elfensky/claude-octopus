@@ -1,4 +1,6 @@
 #!/bin/bash
+set -euo pipefail
+
 # tests/unit/test-opus-48-routing.sh
 # Behavioral coverage for the Opus 4.8 routing change (v9.42).
 #

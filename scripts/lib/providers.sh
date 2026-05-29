@@ -469,6 +469,21 @@ detect_claude_code_version() {
         SUPPORTS_BASH_SESSION_ID_ENV=true
     fi
 
+    # v9.42: Claude Code v2.1.154+ (Opus 4.8, dynamic workflows, lean prompt default)
+    if version_compare "$CLAUDE_CODE_VERSION" "2.1.154" ">="; then
+        SUPPORTS_OPUS_4_8=true
+        SUPPORTS_DYNAMIC_WORKFLOWS=true
+        SUPPORTS_LEAN_SYSTEM_PROMPT_DEFAULT=true
+    fi
+
+    # v9.42: Claude Code v2.1.157+ (skills autoload, agent settings, worktree switching, richer OTel)
+    if version_compare "$CLAUDE_CODE_VERSION" "2.1.157" ">="; then
+        SUPPORTS_AGENT_SETTINGS_AGENT_FIELD=true
+        SUPPORTS_SKILLS_AUTO_PLUGIN_LOAD=true
+        SUPPORTS_ENTER_WORKTREE_SWITCH=true
+        SUPPORTS_TOOL_DECISION_PARAMS_OTEL=true
+    fi
+
     log "INFO" "Claude Code v$CLAUDE_CODE_VERSION detected"
     log "INFO" "Task Management: $SUPPORTS_TASK_MANAGEMENT | Fork Context: $SUPPORTS_FORK_CONTEXT | Agent Teams: $SUPPORTS_AGENT_TEAMS"
     log "INFO" "Persistent Memory: $SUPPORTS_PERSISTENT_MEMORY | Hook Events: $SUPPORTS_HOOK_EVENTS | Agent Type Routing: $SUPPORTS_AGENT_TYPE_ROUTING"
@@ -514,6 +529,8 @@ detect_claude_code_version() {
     log "INFO" "Plugin URL: $SUPPORTS_PLUGIN_URL | Force Sync Output: $SUPPORTS_FORCE_SYNC_OUTPUT | Package Manager Auto Update: $SUPPORTS_PACKAGE_MANAGER_AUTO_UPDATE"
     log "INFO" "Experimental Manifest Keys: $SUPPORTS_EXPERIMENTAL_MANIFEST_KEYS | Gateway Discovery Opt-in: $SUPPORTS_GATEWAY_MODEL_DISCOVERY_OPT_IN | Skill Overrides: $SUPPORTS_SKILL_OVERRIDES"
     log "INFO" "Bash Session ID Env: $SUPPORTS_BASH_SESSION_ID_ENV"
+    log "INFO" "Opus 4.8: $SUPPORTS_OPUS_4_8 | Dynamic Workflows: $SUPPORTS_DYNAMIC_WORKFLOWS | Lean Prompt Default: $SUPPORTS_LEAN_SYSTEM_PROMPT_DEFAULT"
+    log "INFO" "Agent Settings Agent Field: $SUPPORTS_AGENT_SETTINGS_AGENT_FIELD | Skills Auto Plugin Load: $SUPPORTS_SKILLS_AUTO_PLUGIN_LOAD | EnterWorktree Switch: $SUPPORTS_ENTER_WORKTREE_SWITCH | Tool Decision Params OTel: $SUPPORTS_TOOL_DECISION_PARAMS_OTEL"
 
     # v8.29.0: Context window control
     OCTOPUS_CONTEXT_WINDOW="${OCTOPUS_CONTEXT_WINDOW:-auto}"

@@ -403,7 +403,7 @@ SUPPORTS_PRETOOL_CTX_ON_FAIL=false      # v9.23: Claude Code v2.1.110+ (PreToolU
 SUPPORTS_TUI_FULLSCREEN=false           # v9.23: Claude Code v2.1.110+ (/tui fullscreen flicker-free rendering)
 SUPPORTS_OTEL_RAW_BODIES=false          # v9.23: Claude Code v2.1.110+ (OTEL_LOG_RAW_API_BODIES — full API bodies in OTel events)
 SUPPORTS_POWERSHELL_TOOL=false          # v9.23: Claude Code v2.1.110+ (PowerShell tool — Windows GA, progressive rollout)
-SUPPORTS_XHIGH_EFFORT=false             # v9.23: Claude Code v2.1.111+ (xhigh effort level — Opus 4.7 only; falls back to high on older models)
+SUPPORTS_XHIGH_EFFORT=false             # v9.23: Claude Code v2.1.111+ (xhigh effort level)
 SUPPORTS_OPUS_4_7=false                 # v9.23: Claude Code v2.1.111+ (claude-opus-4-7 model available via Anthropic API)
 SUPPORTS_AUTO_MODE_GA=false             # v9.23: Claude Code v2.1.111+ (auto mode no longer requires --enable-auto-mode flag)
 SUPPORTS_ULTRAREVIEW=false              # v9.23: Claude Code v2.1.111+ (/ultrareview — cloud parallel multi-agent PR review, complements /octo:review)
@@ -426,6 +426,13 @@ SUPPORTS_GATEWAY_MODEL_DISCOVERY_OPT_IN=false # v9.36: Claude Code v2.1.129+ (ga
 SUPPORTS_SKILL_OVERRIDES=false          # v9.36: Claude Code v2.1.129+ (skillOverrides off/user-invocable-only/name-only)
 SUPPORTS_PR_COUNT_MCP_OTEL=false        # v9.36: Claude Code v2.1.129+ (claude_code.pull_request.count includes MCP-created PRs)
 SUPPORTS_BASH_SESSION_ID_ENV=false      # v9.37: Claude Code v2.1.132+ (CLAUDE_CODE_SESSION_ID in Bash tool subprocess env)
+SUPPORTS_OPUS_4_8=false                 # v9.42: Claude Code v2.1.154+ (claude-opus-4-8 model and high-effort default)
+SUPPORTS_DYNAMIC_WORKFLOWS=false        # v9.42: Claude Code v2.1.154+ (native dynamic workflows)
+SUPPORTS_LEAN_SYSTEM_PROMPT_DEFAULT=false # v9.42: Claude Code v2.1.154+ (lean system prompt default for newer models)
+SUPPORTS_AGENT_SETTINGS_AGENT_FIELD=false # v9.42: Claude Code v2.1.157+ (claude agents honors settings.json agent)
+SUPPORTS_SKILLS_AUTO_PLUGIN_LOAD=false  # v9.42: Claude Code v2.1.157+ (.claude/skills plugin autoload)
+SUPPORTS_ENTER_WORKTREE_SWITCH=false    # v9.42: Claude Code v2.1.157+ (EnterWorktree can switch Claude-managed worktrees)
+SUPPORTS_TOOL_DECISION_PARAMS_OTEL=false # v9.42: Claude Code v2.1.157+ (tool_decision tool_parameters with OTEL_LOG_TOOL_DETAILS=1)
 OCTOPUS_BACKEND="api"              # v8.16: Detected backend (api|bedrock|vertex|foundry)
 AGENT_TEAMS_ENABLED="${CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS:-0}"
 OCTOPUS_SECURITY_V870="${OCTOPUS_SECURITY_V870:-true}"
@@ -510,10 +517,10 @@ source "${SCRIPT_DIR}/async-tmux-features.sh"
 # FAST OPUS 4.6 MODE SELECTION (v8.4 - Claude Code v2.1.36+)
 # Routes between fast/standard Opus based on task context
 #
-# IMPORTANT: Fast Opus is 6x MORE EXPENSIVE than standard:
-#   Standard: $5/$25 per MTok (input/output)
-#   Fast (<200K ctx): $30/$150 per MTok (input/output)
-#   Fast (>200K ctx): $60/$225 per MTok (input/output)
+# IMPORTANT: Fast Opus is more expensive than standard:
+#   Opus 4.8 standard: $5/$25 per MTok (input/output)
+#   Opus 4.8 fast: $10/$50 per MTok (input/output)
+#   Legacy Opus 4.6 fast: $30/$150 per MTok (input/output)
 #
 # Fast mode trades cost for speed. Default is STANDARD (cost-efficient).
 # Only use fast when user explicitly requests it or for interactive single-shot tasks.

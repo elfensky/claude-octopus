@@ -31,10 +31,10 @@ record_result_hash() {
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# EFFORT LEVEL MAPPING (v8.32.0)
-# Maps phase + complexity to Claude SDK effort levels (low/medium/high)
+# EFFORT LEVEL MAPPING (v8.32.0; refreshed for Opus 4.8 in v9.42.0)
+# Maps phase + complexity to Claude SDK effort levels.
 # Gated by SUPPORTS_SDK_MODEL_CAPS (Claude Code v2.1.49+)
-# Override: OCTOPUS_EFFORT_OVERRIDE=low|medium|high
+# Override: OCTOPUS_EFFORT_OVERRIDE=low|medium|high|xhigh|max
 # ═══════════════════════════════════════════════════════════════════════════════
 
 get_effort_level() {
@@ -60,9 +60,8 @@ get_effort_level() {
         esac
     fi
 
-    # v9.23: xhigh is Opus 4.7's recommended default for coding/agentic work.
-    # Use it when available and the phase warrants depth. Fall back to high on
-    # Opus 4.6 (where xhigh is silently mapped to high by Claude Code anyway).
+    # v9.42: Opus 4.8 defaults to high. Use xhigh only for difficult
+    # implementation, deep review, and long-running asynchronous workflows.
     local _deep="high"
     if [[ "${SUPPORTS_XHIGH_EFFORT:-false}" == "true" ]]; then
         _deep="xhigh"
@@ -72,35 +71,38 @@ get_effort_level() {
     local effort=""
     case "$phase" in
         probe|discover)
-            # Research: broad not deep — stay at medium regardless of complexity
-            effort="medium"
+            # Research: Opus 4.8 high is the balanced default.
+            effort="high"
             ;;
         grasp|define)
-            # Scoping: needs reasoning but not maximum depth
-            effort="medium"
+            # Scoping/planning: high by default, xhigh only if explicitly marked complex.
+            case "$complexity" in
+                3) effort="$_deep" ;;
+                *) effort="high" ;;
+            esac
             ;;
         tangle|develop)
-            # Implementation: scale with complexity — xhigh on 4.7 is the sweet spot
+            # Implementation: xhigh for complex work, high for ordinary work.
             case "$complexity" in
-                1) effort="medium" ;;
+                1) effort="high" ;;
                 3) effort="$_deep" ;;
-                *) effort="medium" ;;
+                *) effort="high" ;;
             esac
             ;;
         ink|deliver)
-            # Review: xhigh for complex (security, architecture), medium otherwise
+            # Review: xhigh for security/architecture/deep review, high otherwise.
             case "$complexity" in
                 3) effort="$_deep" ;;
-                *) effort="medium" ;;
+                *) effort="high" ;;
             esac
             ;;
         *)
-            effort="medium"
+            effort="high"
             ;;
     esac
 
     # Defensive default
-    effort="${effort:-medium}"
+    effort="${effort:-high}"
     echo "$effort"
 }
 

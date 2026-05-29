@@ -80,16 +80,34 @@ get_agent_command() {
         claude) echo "claude${_BARE_OPT} --print" ;;                         # Claude Sonnet 4.6
         claude-sonnet) echo "claude${_BARE_OPT} --print --model sonnet" ;;        # Claude Sonnet explicit
         claude-opus)
-            # v9.23: Opus alias — resolves to 4.7 on Anthropic API (v2.1.111+), 4.6 on Bedrock/Vertex.
+            # v9.42: Opus alias — resolves to 4.8 on Claude Code v2.1.154+,
+            # then 4.7/4.6 on older hosts or enterprise backends.
             # Use `env VAR=val` prefix so the assignment survives read -ra word-splitting
             # in spawn.sh — a bare VAR=val prefix only works in shell eval context.
-            if [[ "${SUPPORTS_XHIGH_EFFORT:-false}" == "true" ]]; then
-                echo "env CLAUDE_CODE_EFFORT_LEVEL=xhigh claude${_BARE_OPT} --print --model opus"
+            local opus_effort="high"
+            if declare -f get_effort_level >/dev/null 2>&1; then
+                local opus_complexity="2"
+                case "${phase:-}" in
+                    tangle|develop|ink|deliver) opus_complexity="3" ;;
+                esac
+                opus_effort="$(get_effort_level "${phase:-unknown}" "$opus_complexity")"
+                opus_effort="${opus_effort:-high}"
+            elif [[ -n "${OCTOPUS_EFFORT_OVERRIDE:-}" ]]; then
+                opus_effort="$OCTOPUS_EFFORT_OVERRIDE"
+            fi
+            if [[ "${SUPPORTS_EFFORT_COMMAND:-false}" == "true" || "${SUPPORTS_XHIGH_EFFORT:-false}" == "true" ]]; then
+                echo "env CLAUDE_CODE_EFFORT_LEVEL=${opus_effort} claude${_BARE_OPT} --print --model opus"
             else
                 echo "claude${_BARE_OPT} --print --model opus"
             fi
             ;;
-        claude-opus-fast) echo "claude${_BARE_OPT} --print --model claude-opus-4-6 --fast" ;; # Claude Opus 4.6 Fast (v8.4: v2.1.36+) — pinned to 4.6 (no 4.7 fast variant)
+        claude-opus-fast)
+            if [[ "${SUPPORTS_OPUS_4_8:-false}" == "true" && "${OCTOPUS_OPUS_MODEL:-}" != "claude-opus-4.6" ]]; then
+                echo "claude${_BARE_OPT} --print --model claude-opus-4-8 --fast"
+            else
+                echo "claude${_BARE_OPT} --print --model claude-opus-4-6 --fast"
+            fi
+            ;;
         claude-opus-legacy) echo "claude${_BARE_OPT} --print --model claude-opus-4-6" ;; # v9.23: explicit 4.6 opt-in
         openrouter) echo "openrouter_execute" ;;                 # OpenRouter API (v4.8)
         openrouter-glm5) echo "openrouter_execute_model z-ai/glm-5" ;;           # v8.11.0: GLM-5 via OpenRouter

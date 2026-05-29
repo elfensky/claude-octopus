@@ -78,7 +78,7 @@ ensure_config() {
     },
     "claude": {
       "default": "claude-sonnet-4.6",
-      "opus": "claude-opus-4.6"
+      "opus": "claude-opus-4.8"
     },
     "perplexity": {
       "default": "sonar-pro",
@@ -524,7 +524,9 @@ cmd_models() {
         "gemini-3-flash-preview|1000|yes|yes|no|gemini|budget|active"
         "gemini-3-pro-image-preview|1000|yes|yes|no|gemini|premium|active"
         "claude-sonnet-4.6|200|yes|yes|no|claude|standard|active"
-        "claude-opus-4.6|200|yes|yes|no|claude|premium|active"
+        "claude-opus-4.8|1000|yes|yes|yes|claude|premium|active"
+        "claude-opus-4.7|1000|yes|yes|yes|claude|premium|legacy"
+        "claude-opus-4.6|200|yes|yes|yes|claude|premium|legacy"
         "grok-4-20|200|yes|no|no|cursor-agent|standard|active"
         "grok-4-20-thinking|200|yes|no|yes|cursor-agent|premium|active"
         "composer-2-fast|200|yes|no|no|cursor-agent|standard|active"

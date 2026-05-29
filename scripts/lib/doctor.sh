@@ -1276,6 +1276,31 @@ doctor_check_skills() {
             "Octopus uses it for Claude-specific careful/freeze state, proof packets, usage files, and session-scoped caches"
     fi
 
+    # v9.42: Surface Claude Code v2.1.154-157 / Opus 4.8 capabilities.
+    if [[ "${SUPPORTS_OPUS_4_8:-false}" == "true" ]]; then
+        doctor_add "opus-4-8" "skills" "pass" \
+            "CC v2.1.154 Opus 4.8 available; claude-opus routes to the current premium model" \
+            "Use OCTOPUS_OPUS_MODEL=claude-opus-4.6 only when you need legacy behavior"
+    fi
+
+    if [[ "${SUPPORTS_DYNAMIC_WORKFLOWS:-false}" == "true" ]]; then
+        doctor_add "dynamic-workflows" "skills" "info" \
+            "CC v2.1.154 dynamic workflows available for huge single-Claude migrations" \
+            "Prefer native workflows for codebase-scale single-model migrations; use Octopus for multi-provider disagreement, councils, adversarial review, and validation"
+    fi
+
+    if [[ "${SUPPORTS_SKILLS_AUTO_PLUGIN_LOAD:-false}" == "true" ]]; then
+        doctor_add "skills-auto-plugin-load" "skills" "info" \
+            "CC v2.1.157 auto-loads plugins from .claude/skills directories" \
+            "Local Octopus development can use .claude/skills without marketplace installation when testing plugin changes"
+    fi
+
+    if [[ "${SUPPORTS_ENTER_WORKTREE_SWITCH:-false}" == "true" ]]; then
+        doctor_add "enter-worktree-switch" "skills" "info" \
+            "CC v2.1.157 EnterWorktree can switch between Claude-managed worktrees mid-session" \
+            "Octopus worktree handoff can reuse native switching instead of forcing a fresh checkout"
+    fi
+
     # v9.20.0: Output compression
     if [[ -x "${CLAUDE_PLUGIN_ROOT:-}/hooks/output-compressor.sh" ]]; then
         if [[ "${OCTOPUS_COMPRESS_ENABLED:-true}" == "true" ]]; then

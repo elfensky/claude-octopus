@@ -22,15 +22,17 @@ if ! declare -f is_claude_agent_type >/dev/null 2>&1; then
     }
 fi
 
-# v9.23.0: Opus default picker — prefers 4.7 when host supports it, falls back to 4.6.
-# Respects OCTOPUS_OPUS_MODEL override (user-pinned version).
+# v9.42.0: Opus default picker — prefers 4.8 when host supports it, then 4.7,
+# then 4.6. Respects OCTOPUS_OPUS_MODEL override (user-pinned version).
 opus_default_model() {
     if [[ -n "${OCTOPUS_OPUS_MODEL:-}" ]]; then
         echo "$OCTOPUS_OPUS_MODEL"
         return 0
     fi
-    # SUPPORTS_OPUS_4_7 is detected from Claude Code v2.1.111+ — see lib/providers.sh
-    if [[ "${SUPPORTS_OPUS_4_7:-false}" == "true" ]]; then
+    # SUPPORTS_OPUS_4_8 is detected from Claude Code v2.1.154+ — see lib/providers.sh
+    if [[ "${SUPPORTS_OPUS_4_8:-false}" == "true" ]]; then
+        echo "claude-opus-4.8"
+    elif [[ "${SUPPORTS_OPUS_4_7:-false}" == "true" ]]; then
         echo "claude-opus-4.7"
     else
         echo "claude-opus-4.6"

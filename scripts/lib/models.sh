@@ -36,8 +36,10 @@ get_model_catalog() {
         gemini-3-pro-image-preview) echo "1000|yes|yes|no|gemini|premium|active" ;;
         # Claude
         claude-sonnet-4.6)      echo "200|yes|yes|no|claude|standard|active" ;;
-        claude-opus-4.7)        echo "1000|yes|yes|yes|claude|premium|active" ;;
+        claude-opus-4.8)        echo "1000|yes|yes|yes|claude|premium|active" ;;
+        claude-opus-4.7)        echo "1000|yes|yes|yes|claude|premium|legacy" ;;
         claude-opus-4.6)        echo "200|yes|yes|yes|claude|premium|legacy" ;;
+        claude-opus-4.8-fast)   echo "1000|yes|yes|yes|claude|premium|active" ;;
         claude-opus-4.6-fast)   echo "200|yes|yes|yes|claude|premium|legacy" ;;
         # Cursor Agent (Grok via Cursor subscription)
         grok-4-20)              echo "200|yes|no|no|cursor-agent|standard|active" ;;
@@ -112,7 +114,7 @@ list_models() {
         gpt-5.4-mini gpt-5.1-codex-max
         o3 o3-pro o3-mini
         gemini-3.1-pro-preview gemini-3-flash-preview gemini-3-pro-image-preview
-        claude-sonnet-4.6 claude-opus-4.7 claude-opus-4.6 claude-opus-4.6-fast
+        claude-sonnet-4.6 claude-opus-4.8 claude-opus-4.8-fast claude-opus-4.7 claude-opus-4.6 claude-opus-4.6-fast
         grok-4-20 grok-4-20-thinking composer-2-fast composer-2
         z-ai/glm-5 moonshotai/kimi-k2.5 deepseek/deepseek-r1-0528
         opencode/deepseek-v4-flash-free opencode/gpt-5.4 opencode/gpt-5.4-mini opencode/glm-5.1

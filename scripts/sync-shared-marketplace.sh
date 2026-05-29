@@ -123,6 +123,15 @@ checkout_marketplace() {
 
 checkout_marketplace
 
+ensure_commit_identity() {
+    if ! git -C "$WORKDIR" config user.name >/dev/null; then
+        git -C "$WORKDIR" config user.name "${OCTOPUS_SHARED_MARKETPLACE_GIT_NAME:-Claude Octopus Release Bot}"
+    fi
+    if ! git -C "$WORKDIR" config user.email >/dev/null; then
+        git -C "$WORKDIR" config user.email "${OCTOPUS_SHARED_MARKETPLACE_GIT_EMAIL:-octopus-release-bot@users.noreply.github.com}"
+    fi
+}
+
 SHARED_MARKETPLACE="$WORKDIR/.claude-plugin/marketplace.json"
 if [[ ! -f "$SHARED_MARKETPLACE" ]]; then
     echo "ERROR: shared marketplace checkout is missing .claude-plugin/marketplace.json" >&2
@@ -162,6 +171,7 @@ if git -C "$WORKDIR" diff --quiet -- .claude-plugin/marketplace.json; then
     exit 0
 fi
 
+ensure_commit_identity
 git -C "$WORKDIR" add .claude-plugin/marketplace.json
 git -C "$WORKDIR" commit --quiet -m "chore: update octopus marketplace to v$OCTO_VERSION"
 

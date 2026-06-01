@@ -427,9 +427,15 @@ test_council_command_requires_real_runner_by_default() {
 test_council_skill_requires_interactive_choices_for_clarification() {
     test_case "Council skill requires interactive choices for clarification"
 
+    local command_file="$PROJECT_ROOT/.claude/commands/council.md"
+    local cursor_command_file="$PROJECT_ROOT/.cursor-plugin/commands/octo-council.md"
     local skill_file="$PROJECT_ROOT/skills/skill-council/SKILL.md"
 
-    if grep -q "Interactive Choice Handling" "$skill_file" &&
+    if grep -q "AskUserQuestion" "$command_file" &&
+       grep -q "AskUserQuestion" "$cursor_command_file" &&
+       grep -q "AskUserQuestion" "$skill_file" &&
+       grep -q "before running the council runner" "$skill_file" &&
+       grep -q "Interactive Choice Handling" "$skill_file" &&
        grep -q "2-4 mutually exclusive choices" "$skill_file" &&
        grep -q "Do not end" "$skill_file"; then
         test_pass

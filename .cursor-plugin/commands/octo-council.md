@@ -20,7 +20,52 @@ PROHIBITED: Do not simulate a council, role-play multiple personas inside one mo
 
 Run through `skill-council` for preflight, research-first handling, artifact review, and gate handling, but do not let the skill replace the shell runner. Do not skip provider/cost preflight, quorum checks, run artifacts, or implementation gates.
 
-When clarification or options are needed, use an interactive multiple-choice prompt with 2-4 mutually exclusive choices. Do not end the response with a loose question or a list of questions.
+When clarification or options are needed before execution, use `AskUserQuestion` with 2-4 mutually exclusive choices per question, then run the real council runner with the selected flags. Do not end the response with a loose question or a list of questions.
+
+### Interactive Clarification Before Execution
+
+If the task, goal, depth, implementation permission, research mode, or corpus handling is ambiguous, ask before running the council runner:
+
+```javascript
+AskUserQuestion({
+  questions: [
+    {
+      question: "How should the council handle this request?",
+      header: "Council Goal",
+      multiSelect: false,
+      options: [
+        {label: "Advice (Recommended)", description: "Return a structured recommendation without implementation"},
+        {label: "Decision", description: "Optimize for choosing between specific options"},
+        {label: "Implementation plan", description: "Produce a plan but do not edit files"},
+        {label: "Review", description: "Critique existing code, docs, or strategy"}
+      ]
+    },
+    {
+      question: "How deep should the council go?",
+      header: "Depth",
+      multiSelect: false,
+      options: [
+        {label: "Standard (Recommended)", description: "Balanced cost and coverage"},
+        {label: "Quick", description: "Faster, lower-cost pass"},
+        {label: "Deep", description: "More critique and revision, higher cost"}
+      ]
+    },
+    {
+      question: "Should the council use project research or corpus storage?",
+      header: "Context",
+      multiSelect: false,
+      options: [
+        {label: "No corpus (Recommended)", description: "Run with the provided prompt and write normal run artifacts"},
+        {label: "Research first", description: "Gather local corpus context before provider fanout"},
+        {label: "Append corpus", description: "Append research, synthesis, and plans to the project corpus"},
+        {label: "Require corpus", description: "Stop if no durable corpus workspace is available"}
+      ]
+    }
+  ]
+})
+```
+
+If the user already provided clear flags and a clear task, skip clarification and execute immediately.
 
 ## Examples
 

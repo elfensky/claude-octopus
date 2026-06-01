@@ -17,6 +17,60 @@ Use this skill for `/octo:council` and council-style requests.
 
 Do not simulate a council, role-play all members inside the current model, or answer directly in place of the runner. A single-model simulation must be explicitly requested with `--simulate` or `--single-model`; when used, label the output as `single-model simulation` and keep the generated `summary.json` path visible. Otherwise, missing provider quorum is a partial/failed council, not permission to silently downgrade.
 
+## Phase 0A: Interactive Clarification
+
+If the user invokes `/octo:council` with an ambiguous task, missing goal/depth intent, uncertain implementation permission, or unclear research/corpus expectations, use `AskUserQuestion` before running the council runner. If the prompt already includes clear flags and a clear task, skip this phase and execute immediately.
+
+Use 2-4 mutually exclusive choices per question, put the recommended option first, and map the answers to runner flags before execution. Do not end with a free-form question or a set of questions; present the choice interaction and wait for the answer.
+
+Default council clarification:
+
+```javascript
+AskUserQuestion({
+  questions: [
+    {
+      question: "How should the council handle this request?",
+      header: "Council Goal",
+      multiSelect: false,
+      options: [
+        {label: "Advice (Recommended)", description: "Return a structured recommendation without implementation"},
+        {label: "Decision", description: "Optimize for choosing between specific options"},
+        {label: "Implementation plan", description: "Produce a plan but do not edit files"},
+        {label: "Review", description: "Critique existing code, docs, or strategy"}
+      ]
+    },
+    {
+      question: "How deep should the council go?",
+      header: "Depth",
+      multiSelect: false,
+      options: [
+        {label: "Standard (Recommended)", description: "Balanced cost and coverage"},
+        {label: "Quick", description: "Faster, lower-cost pass"},
+        {label: "Deep", description: "More critique and revision, higher cost"}
+      ]
+    },
+    {
+      question: "Should the council use project research or corpus storage?",
+      header: "Context",
+      multiSelect: false,
+      options: [
+        {label: "No corpus (Recommended)", description: "Run with the provided prompt and write normal run artifacts"},
+        {label: "Research first", description: "Add --research-first before provider fanout"},
+        {label: "Append corpus", description: "Use --corpus-mode append for durable project notes"},
+        {label: "Require corpus", description: "Use --corpus-mode require and stop if no corpus workspace exists"}
+      ]
+    }
+  ]
+})
+```
+
+Translate answers as follows:
+
+- Advice, Decision, Implementation plan, or Review -> `--goal advice|decision|plan|review`
+- Quick, Standard, or Deep -> `--depth quick|standard|deep`
+- Research first -> `--research-first`
+- Append corpus or Require corpus -> `--corpus-mode append|require`
+
 ## Phase 0: Preflight
 
 Collect or infer:
@@ -62,4 +116,4 @@ Never implement from council output without explicit approval. Preserve disagree
 
 ## Interactive Choice Handling
 
-When the user needs to clarify scope, select a depth/provider/corpus option, approve a gate, or decide between follow-up actions, use an interactive multiple-choice prompt with 2-4 mutually exclusive choices. Put the recommended choice first. Do not end with a free-form question or a set of questions; present the choice interaction and wait for the answer.
+When the user needs to clarify scope, select a depth/provider/corpus option, approve a gate, or decide between follow-up actions, use `AskUserQuestion` with 2-4 mutually exclusive choices. Put the recommended choice first. Do not end with a free-form question or a set of questions; present the choice interaction and wait for the answer.

@@ -6,6 +6,7 @@
 
 - Claude Code v2.1.154-2.1.157 feature flags: `SUPPORTS_OPUS_4_8`, `SUPPORTS_DYNAMIC_WORKFLOWS`, `SUPPORTS_LEAN_SYSTEM_PROMPT_DEFAULT`, `SUPPORTS_AGENT_SETTINGS_AGENT_FIELD`, `SUPPORTS_SKILLS_AUTO_PLUGIN_LOAD`, `SUPPORTS_ENTER_WORKTREE_SWITCH`, and `SUPPORTS_TOOL_DECISION_PARAMS_OTEL`.
 - Model catalog and pricing entries for `claude-opus-4.8` and `claude-opus-4.8-fast`.
+- `/octo:council` flags for explicit single-model simulation (`--simulate` / `--single-model`), research-first handling, and corpus retention mode.
 
 ### Changed
 
@@ -13,6 +14,7 @@
 - Opus effort policy now follows the 4.8 default: `high` for ordinary work, `xhigh` for complex implementation, deep review, and long-running asynchronous workflows. This phase-aware mapping applies to every supported Opus version (4.8, 4.7, and 4.6 on hosts that expose effort control), replacing the previous behavior of forcing `xhigh` on all phases; research and scoping phases now run at `high` instead of `xhigh`.
 - Behavioral test coverage for the routing change: `tests/unit/test-opus-48-routing.sh` asserts `opus_default_model` version preference and override, the `claude-opus-fast` wire flag, and the phase-to-effort mapping (the existing detection test only checked flag wiring).
 - Fast Opus guidance and pricing now distinguish Opus 4.8 fast mode (2x standard, $10/$50 MTok) from legacy Opus 4.6 fast mode (6x standard, $30/$150 MTok).
+- `/octo:council` now requires the real runner by default, records execution/research/corpus mode in artifacts, writes research-first context before fanout, appends durable corpus entries when requested, and reserves single-model simulation for explicit requests only.
 - `/octo:doctor` now surfaces Opus 4.8, dynamic workflows, `.claude/skills` plugin auto-load, and EnterWorktree switching when the installed Claude Code version supports them.
 - Documentation now routes huge single-Claude migrations toward native Claude Code dynamic workflows and keeps Octopus positioned for multi-provider disagreement, councils, adversarial review, and validation.
 

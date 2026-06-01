@@ -8,7 +8,21 @@ skill: skill-council
 
 Use `/octo:council <task>` when the user wants a structured council of multiple LLM personas to advise, critique, synthesize, and optionally hand off an approved implementation plan.
 
-Run through `skill-council`. Do not skip provider/cost preflight, quorum checks, or implementation gates.
+## MANDATORY COMPLIANCE
+
+Run the real Octopus runner by default. Your council execution action must resolve the plugin root and call:
+
+```bash
+"$CLAUDE_PLUGIN_ROOT/scripts/orchestrate.sh" council $ARGUMENTS
+```
+
+If `CLAUDE_PLUGIN_ROOT` is unset, use `${HOME}/.claude-octopus/plugin/scripts/orchestrate.sh`.
+
+PROHIBITED: Do not simulate a council, role-play multiple personas inside one model, or answer directly unless the user explicitly passes `--simulate` or `--single-model`. If simulation is requested, label it as `single-model simulation` in the response and preserve the runner's `summary.json` path.
+
+Run through `skill-council` for preflight, research-first handling, artifact review, and gate handling, but do not let the skill replace the shell runner. Do not skip provider/cost preflight, quorum checks, run artifacts, or implementation gates.
+
+When clarification or options are needed, use an interactive multiple-choice prompt with 2-4 mutually exclusive choices. Do not end the response with a loose question or a list of questions.
 
 ## Examples
 
@@ -32,6 +46,10 @@ Run through `skill-council`. Do not skip provider/cost preflight, quorum checks,
 - `--benchmark auto|on|off`
 - `--providers auto|claude,codex,gemini,opencode,openrouter`
 - `--max-cost <usd>`
+- `--simulate`
+- `--single-model`
+- `--research-first`
+- `--corpus-mode off|append|require`
 - `--dry-run`
 - `--json`
 - `--output-dir <path>`

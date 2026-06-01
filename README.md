@@ -253,6 +253,8 @@ Nine high-traffic commands cover the common Octopus workflows: lifecycle executi
 /octo:prd mobile checkout redesign          # AI-optimized PRD with 100-point scoring
 ```
 
+`/octo:council` uses the real runner by default. Single-model simulation is only used when explicitly requested with `--simulate` or `--single-model`; `--research-first` writes a research artifact before fanout, and `--corpus-mode append|require` preserves synthesis and plans in project corpus workflows.
+
 Plus 40+ more: review, debug, extract, deck, docs, schedule, parallel, sentinel, optimize, brainstorm, claw, doctor, and [the full set](docs/COMMAND-REFERENCE.md).
 
 Don't remember the command name? Just describe what you need:

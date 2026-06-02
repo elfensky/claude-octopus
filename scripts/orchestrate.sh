@@ -98,6 +98,7 @@ source "${SCRIPT_DIR}/lib/secure.sh" 2>/dev/null || true
 # Provider detection & version checking (v9.7.7 extraction)
 # Strict source (no silencing) for libs critical to core workflows — surfaces syntax errors
 source "${SCRIPT_DIR}/lib/providers.sh"
+source "${SCRIPT_DIR}/lib/probe-results.sh" 2>/dev/null || true
 source "${SCRIPT_DIR}/lib/preflight.sh" 2>/dev/null || true
 source "${SCRIPT_DIR}/lib/dispatch.sh" 2>/dev/null || true
 source "${SCRIPT_DIR}/lib/progressive.sh" 2>/dev/null || true
@@ -2405,8 +2406,7 @@ case "$COMMAND" in
         synth_result_count=0
         for result in "$RESULTS_DIR"/*-probe-${synth_task_group}-*.md; do
             [[ -f "$result" ]] || continue
-            fsize=$(wc -c < "$result" 2>/dev/null || echo "0")
-            [[ $fsize -gt 500 ]] && ((synth_result_count++)) || true
+            probe_result_file_is_usable "$result" && ((synth_result_count++)) || true
         done
 
         if [[ $synth_result_count -eq 0 ]]; then

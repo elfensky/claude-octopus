@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+## [9.44.0] - 2026-06-10
+
+
 ### Added
 
 - **Claude Fable 5 (Mythos-class) as opt-in premium Claude model.** `claude-fable-5` added to the model catalog and pricing tables ($10/$50 per MTok, 1M context, 128K output). Opt in by pinning `OCTOPUS_OPUS_MODEL=claude-fable-5`; never auto-selected because it costs 2x Opus 4.8 and Anthropic retains prompts/outputs up to 30 days for safety classifiers.
